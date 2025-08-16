@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Rafstraumr — Electronics & RF</title>
+  <meta name="description" content="Evgeny Kuxa — electronics engineering, RF, PCB layout, measurement & modeling." />
+  <style>
+    :root { --bg:#0b0d10; --fg:#e9eef2; --muted:#9aa7b2; --accent:#4da3ff; }
+    * { box-sizing:border-box; }
+    body { margin:0; font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif; background:var(--bg); color:var(--fg); }
+    header { max-width:860px; margin:8vh auto 0; padding:0 20px; }
+    h1 { font-size: clamp(28px,6vw,44px); margin:0 0 8px; }
+    h2 { font-size: clamp(18px,3vw,22px); color:var(--muted); margin:0 0 28px; }
+    .grid { max-width:860px; margin:24px auto; padding:0 20px; display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); }
+    .card { border:1px solid #1a2128; border-radius:14px; padding:18px; background:#0f1318; }
+    .card h3 { margin:0 0 8px; font-size:18px; }
+    .card p { margin:0; color:var(--muted); }
+    a { color:var(--accent); text-decoration:none; }
+    footer { max-width:860px; margin:32px auto 48px; padding:0 20px; color:var(--muted); }
+    .btn { display:inline-block; margin-top:16px; padding:10px 14px; border-radius:10px; border:1px solid #223042; background:#111823; }
+    .tag { font-size:12px; color:#b9c6d0; border:1px solid #223042; border-radius:999px; padding:3px 8px; margin-right:6px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Rafstraumr</h1>
+    <h2>Electronics & RF engineering — PCB layout, measurement, device modeling.</h2>
+    <div>
+      <span class="tag">RF/MMW</span>
+      <span class="tag">PCB</span>
+      <span class="tag">STM32</span>
+      <span class="tag">ESP/LoRa</span>
+      <span class="tag">Device Modeling</span>
+    </div>
+    <a class="btn" href="mailto:hello@rafstraumr.com">Contact</a>
+  </header>
+
+  <section class="grid">
+    <div class="card">
+      <h3>Selected Work</h3>
+      <p>2×2 MIMO RFFE, load-pull bench, mmWave layout following TI refs, low-power IoT boards.</p>
+    </div>
+    <div class="card">
+      <h3>Focus</h3>
+      <p>Signal integrity, RF layout constraints, CE/RED-aware design, bring-up & validation.</p>
+    </div>
+    <div class="card">
+      <h3>Background</h3>
+      <p>RØDE Microphones, RF device modeling, measurement automation, compact SPICE models.</p>
+    </div>
+  </section>
+
+  <footer>
+    © <span id="y"></span> Rafstraumr — Evgeny Kuxa · <a href="https://github.com/rafstraumr">GitHub</a> · <a href="mailto:hello@rafstraumr.com">Email</a>
+  </footer>
+  <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+</body>
+</html>
