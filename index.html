@@ -4,56 +4,437 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Rafstraumr — Electronics & RF</title>
-  <meta name="description" content="Evgeny Kuxa — electronics engineering, RF, PCB layout, measurement & modeling." />
+  <meta name="description" content="Rafstraumr — electronics engineering, RF, PCB layout, measurement & modeling." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    :root { --bg:#0b0d10; --fg:#e9eef2; --muted:#9aa7b2; --accent:#4da3ff; }
-    * { box-sizing:border-box; }
-    body { margin:0; font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif; background:var(--bg); color:var(--fg); }
-    header { max-width:860px; margin:8vh auto 0; padding:0 20px; }
-    h1 { font-size: clamp(28px,6vw,44px); margin:0 0 8px; }
-    h2 { font-size: clamp(18px,3vw,22px); color:var(--muted); margin:0 0 28px; }
-    .grid { max-width:860px; margin:24px auto; padding:0 20px; display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); }
-    .card { border:1px solid #1a2128; border-radius:14px; padding:18px; background:#0f1318; }
-    .card h3 { margin:0 0 8px; font-size:18px; }
-    .card p { margin:0; color:var(--muted); }
-    a { color:var(--accent); text-decoration:none; }
-    footer { max-width:860px; margin:32px auto 48px; padding:0 20px; color:var(--muted); }
-    .btn { display:inline-block; margin-top:16px; padding:10px 14px; border-radius:10px; border:1px solid #223042; background:#111823; }
-    .tag { font-size:12px; color:#b9c6d0; border:1px solid #223042; border-radius:999px; padding:3px 8px; margin-right:6px; }
+    :root {
+      --bg: #f6efe7;
+      --ink: #0d1b24;
+      --muted: #4e5b66;
+      --accent: #e24c2b;
+      --accent-2: #1b7a6b;
+      --accent-3: #194a8a;
+      --card: #fff7ef;
+      --shadow: 0 24px 60px rgba(13, 27, 36, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: radial-gradient(1200px 800px at 80% -10%, #ffd7c2 0%, transparent 55%),
+                  radial-gradient(900px 700px at -10% 20%, #cfe8e2 0%, transparent 60%),
+                  linear-gradient(120deg, #f6efe7 0%, #f1f6f5 100%);
+      font: 16px/1.6 "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+      overflow-y: auto;
+      scroll-snap-type: y mandatory;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: radial-gradient(rgba(13, 27, 36, 0.08) 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: 0.35;
+      z-index: -1;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      padding: 16px clamp(20px, 5vw, 48px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(246, 239, 231, 0.75);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(13, 27, 36, 0.08);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 14px;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: conic-gradient(from 120deg, var(--accent), #f8b14f, var(--accent-2));
+      box-shadow: inset 0 0 0 2px rgba(13, 27, 36, 0.12);
+    }
+
+    nav {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    nav a:hover,
+    nav a:focus-visible,
+    nav a.active {
+      border-color: rgba(13, 27, 36, 0.15);
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .panel {
+      min-height: 100vh;
+      padding: 120px clamp(20px, 6vw, 80px) 80px;
+      display: flex;
+      align-items: center;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+
+    .panel-inner {
+      max-width: 960px;
+      width: 100%;
+      margin: 0 auto;
+      display: grid;
+      gap: 24px;
+    }
+
+    .eyebrow {
+      font: 500 13px/1 "IBM Plex Mono", "Courier New", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 6vw, 64px);
+      line-height: 1.05;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(26px, 4.5vw, 44px);
+      line-height: 1.1;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(16px, 2vw, 18px);
+      max-width: 64ch;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tag {
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(13, 27, 36, 0.06);
+      border: 1px solid rgba(13, 27, 36, 0.08);
+      font: 500 12px/1 "IBM Plex Mono", "Courier New", monospace;
+      letter-spacing: 0.08em;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      padding: 20px 22px;
+      border-radius: 18px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(13, 27, 36, 0.08);
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 16px 30px rgba(226, 76, 43, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .cta:hover,
+    .cta:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 32px rgba(226, 76, 43, 0.45);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 18px;
+    }
+
+    .metric {
+      padding: 16px 18px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(13, 27, 36, 0.08);
+      text-align: left;
+    }
+
+    .metric span {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .metric strong {
+      font-size: 26px;
+    }
+
+    .stagger > * {
+      opacity: 0;
+      transform: translateY(12px);
+      animation: rise 0.7s ease forwards;
+      animation-delay: calc(var(--i) * 120ms);
+    }
+
+    @keyframes rise {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .panel.home {
+      background: linear-gradient(135deg, rgba(255, 226, 206, 0.6) 0%, rgba(255, 255, 255, 0) 60%);
+    }
+
+    .panel.measurements {
+      background: linear-gradient(160deg, rgba(207, 232, 226, 0.6) 0%, rgba(255, 255, 255, 0) 60%);
+    }
+
+    .panel.benches {
+      background: linear-gradient(135deg, rgba(197, 214, 245, 0.55) 0%, rgba(255, 255, 255, 0) 65%);
+    }
+
+    .panel.modelling {
+      background: linear-gradient(140deg, rgba(255, 216, 170, 0.55) 0%, rgba(255, 255, 255, 0) 70%);
+    }
+
+    .panel.contact {
+      background: linear-gradient(160deg, rgba(236, 233, 217, 0.7) 0%, rgba(255, 255, 255, 0) 65%);
+    }
+
+    footer {
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    footer a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    @media (max-width: 760px) {
+      nav { gap: 8px; }
+      nav a { padding: 6px 10px; font-size: 11px; }
+      .topbar { padding: 12px 16px; }
+      .panel { padding-top: 110px; }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Rafstraumr</h1>
-    <h2>Electronics & RF engineering — PCB layout, measurement, device modeling.</h2>
-    <div>
-      <span class="tag">RF/MMW</span>
-      <span class="tag">PCB</span>
-      <span class="tag">STM32</span>
-      <span class="tag">ESP/BLE</span>
-      <span class="tag">EMC/EMI</span>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"></div>
+      Rafstraumr
     </div>
-    <a class="btn" href="mailto:hello@rafstraumr.com">Contact</a>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#measurements">Measurements</a>
+      <a href="#benches">Benches</a>
+      <a href="#modelling">Modelling</a>
+      <a href="#contact">Contact</a>
+    </nav>
   </header>
 
-  <section class="grid">
-    <div class="card">
-      <h3>Selected Work</h3>
-      <p>SDR RFFE, load-pull bench, mmWave layout, low-power IoT boards.</p>
-    </div>
-    <div class="card">
-      <h3>Focus</h3>
-      <p>Signal integrity, RF layout constraints, CE/RED-aware design, bring-up & validation.</p>
-    </div>
-    <div class="card">
-      <h3>Background</h3>
-      <p>RFIC Design, RF device modeling, measurement automation, compact SPICE models.</p>
+  <section id="home" class="panel home">
+    <div class="panel-inner stagger">
+      <span class="eyebrow" style="--i:0">RF / High-Speed Characterization & Validation</span>
+      <h1 style="--i:1">Turning lab setups into repeatable workflows and decision-ready reports.</h1>
+      <p style="--i:2">I help semiconductor, radar, and photonics teams plan measurements, automate data capture, de-embed with discipline, and deliver clear characterization results fast.</p>
+      <div class="tag-row" style="--i:3">
+        <span class="tag">Bench-to-Report</span>
+        <span class="tag">De-embedding</span>
+        <span class="tag">VNA / Load-Pull</span>
+        <span class="tag">Automation</span>
+        <span class="tag">Model Correlation</span>
+      </div>
+      <p style="--i:4">Based in Karlsruhe (Baden-Wurttemberg). Available on-site in Germany/EU and remote for analysis and automation.</p>
+      <div style="--i:5">
+        <a class="cta" href="mailto:hello@rafstraumr.com">Start a project</a>
+      </div>
     </div>
   </section>
 
-  <footer>
-    © <span id="y"></span> Rafstraumr — Evgeny Kuxa · <a href="https://github.com/rafstraumr">GitHub</a> · <a href="mailto:hello@rafstraumr.com">Email</a>
-  </footer>
-  <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+  <section id="measurements" class="panel measurements">
+    <div class="panel-inner stagger">
+      <span class="eyebrow" style="--i:0">Services at a glance</span>
+      <h2 style="--i:1">Project-based support with clear deliverables.</h2>
+      <p style="--i:2">Engagements range from 1–2 day reviews to 5–10 day characterization campaigns and multi-week validation support. Most measurements run on your equipment; I bring the methodology, automation, and analysis workflow.</p>
+      <div class="metrics" style="--i:3">
+        <div class="metric">
+          <span>Characterization</span>
+          <strong>Bench-to-Report</strong>
+        </div>
+        <div class="metric">
+          <span>VNA + Probing</span>
+          <strong>Calibration + De-embedding</strong>
+        </div>
+        <div class="metric">
+          <span>RF Power</span>
+          <strong>Load-Pull + NF</strong>
+        </div>
+        <div class="metric">
+          <span>Automation</span>
+          <strong>Scripts + Data Pipelines</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="benches" class="panel benches">
+    <div class="panel-inner stagger">
+      <span class="eyebrow" style="--i:0">Integrated Validation Sprint</span>
+      <h2 style="--i:1">A focused 5–10 day campaign to unblock characterization.</h2>
+      <p style="--i:2">On-site, hybrid, or on-site with remote analysis. The goal is fast, defensible results with a report your design team can act on immediately.</p>
+      <div class="split" style="--i:3">
+        <div class="card">
+          <h3>Execution Plan</h3>
+          <p>Measurement matrix (bias, frequency, power, temperature), pass/fail criteria tied to specs, and a calibration/de-embedding plan with defined reference planes.</p>
+        </div>
+        <div class="card">
+          <h3>Lab Enablement</h3>
+          <p>Instrument control scripts, structured logging (.s2p/.mdif/CSV), plot templates, and repeatability checks for fixtures and probe planes.</p>
+        </div>
+        <div class="card">
+          <h3>Characterization Report</h3>
+          <p>Small-signal metrics, large-signal performance (P1dB, IP3, PAE, harmonics), noise parameters where applicable, and recommendations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="modelling" class="panel modelling">
+    <div class="panel-inner stagger">
+      <span class="eyebrow" style="--i:0">Modeling & Correlation</span>
+      <h2 style="--i:1">Measurement-to-model alignment that makes simulations predictive.</h2>
+      <p style="--i:2">I extract parameters, validate compact models, and correlate measured behavior to design assumptions so teams can trust the model across operating conditions.</p>
+      <div class="split" style="--i:3">
+        <div class="card">
+          <h3>Model Extraction</h3>
+          <p>Equivalent circuit fitting from S-parameters, noise model correlation, and a validation report with clear plots.</p>
+        </div>
+        <div class="card">
+          <h3>Design Support</h3>
+          <p>RF/high-speed design review, design-for-test guidance, and targeted simulations to explain measurement results.</p>
+        </div>
+        <div class="card">
+          <h3>Who I work with</h3>
+          <p>Semiconductor & RFIC teams, photonics startups, radar labs, and applied research groups on time-limited campaigns.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="panel contact">
+    <div class="panel-inner stagger">
+      <span class="eyebrow" style="--i:0">Contact</span>
+      <h2 style="--i:1">If you have a validation milestone, let’s talk.</h2>
+      <p style="--i:2">Start with a 20-minute call to review your device, lab equipment, and goals. After NDA (if needed), I provide a short proposal with deliverables, timeline, and pricing.</p>
+      <div class="split" style="--i:3">
+        <div class="card">
+          <h3>Direct</h3>
+          <p><a href="mailto:hello@rafstraumr.com">hello@rafstraumr.com</a></p>
+        </div>
+        <div class="card">
+          <h3>Commercial basics</h3>
+          <p>Project-based or day-rate, on-site or remote. Travel billed at cost. Milestone or weekly invoicing.</p>
+        </div>
+        <div class="card">
+          <h3>Location</h3>
+          <p>Karlsruhe, Baden-Wurttemberg · Germany/EU on-site · Remote friendly</p>
+        </div>
+      </div>
+      <footer style="--i:4">
+        <span>© <span id="year"></span> Rafstraumr</span>
+        <span>Electronics & RF Engineering</span>
+      </footer>
+    </div>
+  </section>
+
+  <script>
+    const navLinks = document.querySelectorAll('nav a');
+    const sections = document.querySelectorAll('section');
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const active = entry.target.getAttribute('id');
+          navLinks.forEach((link) => {
+            link.classList.toggle('active', link.getAttribute('href') === `#${active}`);
+          });
+        });
+      },
+      { threshold: 0.6 }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
